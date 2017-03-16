@@ -26,7 +26,6 @@ def find_singletons(all_rows,rows,keys):
     """@data is list of rows. Return all for which the 'keys' elements are unique.
     @keys are the keys that are considered.
     """
-
     if not keys: return []      # 
 
     # http://stackoverflow.com/questions/18272160/access-multiple-elements-of-list-knowing-their-index
@@ -48,6 +47,8 @@ def find_singletons(all_rows,rows,keys):
 
     # Argh! We need to scan against all_rows to see if each ret matches an existing 
     # one with the same keys, but which has a different ID
+    # If we need to do it this way, we should at least sort and use a binary search,
+    # but we don't do that now.
     def purge(candidate):
         for row in all_rows:
             if ((candidate[0] != row[0]) and 
