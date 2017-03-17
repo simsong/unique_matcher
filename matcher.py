@@ -6,10 +6,15 @@ import pytest
 
 total_count = 0
 
+def strkeys(keys):
+    """Return a string for a keys frozenset"""
+    assert type(keys)==frozenset
+    return " ".join([str(x) for x in sorted(keys)])
+
 def print_rows(rows,keys):
     global total_count
     total_count += len(rows)
-    print("==== keys: {} count: {} ====".format(" ".join([str(x) for x in sorted(keys)]),len(rows)))
+    print("==== keys: {} count: {} ====".format(strkeys(keys),len(rows)))
     for row in rows:
         print(row)
     print("\n")
