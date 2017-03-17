@@ -1,5 +1,8 @@
+#!/usr/bin/env python36
+
 from collections import defaultdict
 import csv
+import pytest
 
 total_count = 0
 
@@ -14,8 +17,11 @@ def print_rows(rows,keys):
 def choose_all_subkeys(keys):
     "@keys are a frozenset of keys. Return a list of all permutations of n-1 keys "
     assert type(keys) is frozenset
-    return [keys-frozenset([key]) for key in keys]
 
+    # Return empty list if length is 1, rather than list of empty sets
+    if len(keys)==1:
+        return []  
+    return [keys-frozenset([key]) for key in keys]
 
 def elements_for_keys(row,keys):
     "Return the elements in row[] indicated by keys"
@@ -23,17 +29,20 @@ def elements_for_keys(row,keys):
     operator.itemgetter(row,keys)
 
 def find_singletons(all_rows,rows,keys):
-    """@data is list of rows. Return all for which the 'keys' elements are unique.
-    @keys are the keys that are considered.
+    """Find and return the singletons at the current level.
+    @all_rows is the list of all rows in the original dataset. We always need to prune against that.
+    @rows is the list of singletons from the previous level. It's what we are examining.
+    @keys are the keys that are considered. With each recursive call, keys will be removed.
     """
-    if not keys: return []      # 
+    if args.debug:
+        print("find_singletons(len(all_rows)={},len(rows)={},keys={}".format(len(all_rows),len(rows),keys))
 
     # http://stackoverflow.com/questions/18272160/access-multiple-elements-of-list-knowing-their-index
     import operator
     from collections import Counter
 
     # Make a function that extracts the key columns and makes a tuple
-    print("keys={}".format(keys))
+
     kfun = operator.itemgetter(*keys)
 
     # extract all of the keys from the rows that were passed in 
@@ -74,22 +83,40 @@ def checks_rows_with_keys(all_rows,rows,keys):
 
     # Print the unique rows for these keys
     singleton_rows = find_singletons(all_rows,rows,keys)
-    if rows:
+    if singleton_rows:
         print_rows(singleton_rows,keys)
 
         # Now process all of the sub lists
         for sub_keys in choose_all_subkeys(keys):
+            print("sub_keys=",sub_keys)
             if sub_keys not in checked_keys:
                 checks_rows_with_keys(all_rows,singleton_rows,sub_keys)
 
+#
+# Run the matcher. 
+# Currently, this uses our custom-built tool for reading delimited files.
+# Eventually we should move this to parquet & pandas. 
+
+
 if __name__=="__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description='Extract specified variables from AHS files.',
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('--infile', type=str, default='data.csv', help='file to match')
+    parser.add_argument('--delimiter', type=str, default=',', help='specify delimiter')
+    parser.add_argument('--debug', action="store_true")
+    parser.add_argument('--printdata',action='store_true',help='Print the initial dataset')
+    args = parser.parse_args()
+
     rows = []
-    with open("data.tsv","r") as f:
-        for line in csv.reader(f,delimiter=' '):
+    with open(args.infile,"r") as f:
+        for line in csv.reader(f,delimiter=args.delimiter):
             rows.append(tuple(line)) # use tuples so they will be hashable
-    print("here is the dataset:")
-    for row in rows:
-        print(row)
+
+    if args.printdata:
+        print("here is the dataset:")
+        for row in rows:
+            print(row)
     
     keys = frozenset(range(1,len(rows[0])))
     print("Keys that we will consider: {}".format(keys))
