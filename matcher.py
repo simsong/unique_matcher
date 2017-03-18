@@ -1,8 +1,9 @@
 #!/usr/bin/env python36
 
-from collections import defaultdict
+from collections import defaultdict,Counter
 import csv
 import pytest
+import operator
 
 total_count = 0
 
@@ -37,7 +38,6 @@ def choose_all_subkeys(keys):
 
 def elements_for_keys(row,keys):
     "Return the elements in row[] indicated by keys"
-    import operator
     operator.itemgetter(row,keys)
 
 def find_singletons(all_rows,rows,keys):
@@ -51,7 +51,6 @@ def find_singletons(all_rows,rows,keys):
 
     # http://stackoverflow.com/questions/18272160/access-multiple-elements-of-list-knowing-their-index
     import operator
-    from collections import Counter
 
     # Make a function that extracts the key columns and makes a tuple
 
