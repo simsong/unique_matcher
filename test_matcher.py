@@ -22,3 +22,7 @@ def test_choose_all_subkeys():
     assert sk==[]
 
 
+def test_readrows():
+    rows = read_rows("data.csv")
+    assert rows[0] == ('11111','1','1','1','1')
+    assert len(rows)==16
