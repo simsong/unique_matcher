@@ -14,8 +14,6 @@ def strkeys(keys):
 
 def print_rows(rows,keys=frozenset()):
     from color import color
-    global total_count
-    total_count += len(rows)
     print("==== keys: {} count: {} ====".format(strkeys(keys),len(rows)))
     for row in rows:
         print("( ",end="")
@@ -95,7 +93,11 @@ def checks_rows_with_keys(all_rows,rows,keys):
     # Print the unique rows for these keys
     singleton_rows = find_singletons(all_rows,rows,keys)
     if singleton_rows:
-        print_rows(singleton_rows,keys)
+        global total_count
+        print(" singleton rows: {}".format(len(singleton_rows)))
+        total_count += len(singleton_rows)
+        if args.verbose:
+            print_rows(singleton_rows,keys)
 
         # Now process all of the sub lists
         for sub_keys in choose_all_subkeys(keys):
@@ -116,6 +118,7 @@ if __name__=="__main__":
     parser.add_argument('--infile', type=str, default='data.csv', help='file to match')
     parser.add_argument('--delimiter', type=str, default=',', help='specify delimiter')
     parser.add_argument('--debug', action="store_true")
+    parser.add_argument('--verbose', action="store_true", help='Print each set')
     parser.add_argument('--printdata',action='store_true',help='Print the initial dataset')
     args = parser.parse_args()
 
