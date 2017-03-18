@@ -7,6 +7,18 @@ import operator
 
 total_count = 0
 
+
+# http://stackoverflow.com/questions/1988804/what-is-memoization-and-how-can-i-use-it-in-python
+class Memoize:
+    def __init__(self, f):
+        self.f = f
+        self.memo = {}
+    def __call__(self, *args):
+        if not args in self.memo:
+            self.memo[args] = self.f(*args)
+        return self.memo[args]
+
+
 def strkeys(keys):
     """Return a string for a keys frozenset"""
     assert type(keys)==frozenset
@@ -34,10 +46,6 @@ def choose_all_subkeys(keys):
         return []  
     return [keys-frozenset([key]) for key in keys]
 
-def elements_for_keys(row,keys):
-    "Return the elements in row[] indicated by keys"
-    operator.itemgetter(row,keys)
-
 def find_singletons(all_rows,rows,keys):
     """Find and return the singletons at the current level.
     @all_rows is the list of all rows in the original dataset. We always need to prune against that.
@@ -48,17 +56,19 @@ def find_singletons(all_rows,rows,keys):
         print("find_singletons(len(all_rows)={},len(rows)={},keys={}".format(len(all_rows),len(rows),keys))
 
     # http://stackoverflow.com/questions/18272160/access-multiple-elements-of-list-knowing-their-index
-    import operator
-
     # Make a function that extracts the key columns and makes a tuple
 
     kfun = operator.itemgetter(*keys)
+    #kfun = Memoize(operator.itemgetter(*keys))
+        
 
     # extract all of the keys from the rows that were passed in 
     data_keys   = [kfun(row) for row in rows]
 
     # Find those that are unique
     unique_keys = [key_count[0] for key_count in Counter(data_keys).most_common() if key_count[1]==1]
+    #unique_keys = frozenset(unique_keys) # it's faster to search a set
+    #unique_keys = frozenset((key_count[0] for key_count in Counter(data_keys).most_common() if key_count[1]==1))
     
     # Get the rows that have their keys in unique_keys
     ret = [row for row in rows if (kfun(row) in unique_keys)]
@@ -67,11 +77,12 @@ def find_singletons(all_rows,rows,keys):
     # one with the same keys, but which has a different ID
     # If we need to do it this way, we should at least sort and use a binary search,
     # but we don't do that now.
+
     def purge(candidate):
         for row in all_rows:
-            if ((candidate[0] != row[0]) and 
-                kfun(candidate) == kfun(row)):
-                print("Purge {}".format(candidate))
+            if ((candidate != row) and kfun(candidate) == kfun(row)):
+                if args.debug:
+                    print("purge {}".format(candidate))
                 return True
         return False
 
@@ -86,7 +97,7 @@ checked_keys = set()
 def checks_rows_with_keys(all_rows,rows,keys):
     # Note that we have now checked this permutation of keys
     # Must do this at the beginning because of recursive call
-    print("check_row_with_keys({},{},{})".format(len(all_rows),len(rows),keys))
+    print("check_row_with_keys({},{},{})".format(len(all_rows),len(rows),keys),end='')
 
     checked_keys.add(keys)
 
@@ -101,7 +112,6 @@ def checks_rows_with_keys(all_rows,rows,keys):
 
         # Now process all of the sub lists
         for sub_keys in choose_all_subkeys(keys):
-            print("sub_keys=",sub_keys)
             if sub_keys not in checked_keys:
                 checks_rows_with_keys(all_rows,singleton_rows,sub_keys)
 
@@ -109,7 +119,6 @@ def checks_rows_with_keys(all_rows,rows,keys):
 # Run the matcher. 
 # Currently, this uses our custom-built tool for reading delimited files.
 # Eventually we should move this to parquet & pandas. 
-
 
 if __name__=="__main__":
     import argparse,resource,sys
@@ -127,13 +136,12 @@ if __name__=="__main__":
         for line in csv.reader(f,delimiter=args.delimiter):
             rows.append(tuple(line)) # use tuples so they will be hashable
 
-    if args.printdata:
+    if args.printdata or args.verbose:
         print("here is the dataset:")
-        for row in rows:
-            print(row)
+        print_rows(rows)
     
     keys = frozenset(range(1,len(rows[0])))
-    print("Keys that we will consider: {}".format(keys))
+    print("Keys that we will consider: {}".format(strkeys(keys)))
 
     print("Here are the uniques for each set of keys:")
     checks_rows_with_keys(rows,rows,keys)
