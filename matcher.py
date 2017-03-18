@@ -111,7 +111,7 @@ def checks_rows_with_keys(all_rows,rows,keys):
 
 
 if __name__=="__main__":
-    import argparse
+    import argparse,resource,sys
     parser = argparse.ArgumentParser(description='Extract specified variables from AHS files.',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--infile', type=str, default='data.csv', help='file to match')
@@ -136,3 +136,6 @@ if __name__=="__main__":
     print("Here are the uniques for each set of keys:")
     checks_rows_with_keys(rows,rows,keys)
     print("Total of all uniques {}".format(total_count))
+    r = resource.getrusage(resource.RUSAGE_SELF)
+    print("User CPU: {}   RSS:{}".format(r.ru_utime,r.ru_maxrss))
+    print("User CPU: {}   RSS:{}".format(r.ru_utime,r.ru_maxrss),file=sys.stderr)
