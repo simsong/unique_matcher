@@ -1,4 +1,3 @@
-# http://stackoverflow.com/questions/8924173/how-do-i-print-bold-text-in-python
 class color:
    PURPLE = '\033[95m'
    CYAN = '\033[96m'
