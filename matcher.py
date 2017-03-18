@@ -5,9 +5,6 @@ import csv
 import pytest
 import operator
 
-total_count = 0
-
-
 # http://stackoverflow.com/questions/1988804/what-is-memoization-and-how-can-i-use-it-in-python
 class Memoize:
     def __init__(self, f):
@@ -31,9 +28,9 @@ def print_rows(rows,keys=frozenset()):
         print("( ",end="")
         for i in range(0,len(row)):
             if i>0: print(", ",end='')
-            if i in keys: print(color.BOLD+color.RED,end='')
+            if not args.nocolor and i in keys : print(color.BOLD+color.RED,end='')
             print(row[i],end='')
-            if i in keys: print(color.END,end='')
+            if not args.nocolor and i in keys: print(color.END,end='')
         print(") ")
     print("\n")
 
@@ -94,7 +91,7 @@ def find_singletons(all_rows,rows,keys):
 # checked_lists is the lists of sets that we have checked.
 # at the beginning, we have checked the empty list.
 checked_keys = set()
-def checks_rows_with_keys(all_rows,rows,keys):
+def check_rows_with_keys(all_rows,rows,keys):
     # Note that we have now checked this permutation of keys
     # Must do this at the beginning because of recursive call
     print("check_row_with_keys({},{},{})".format(len(all_rows),len(rows),keys),end='')
@@ -104,16 +101,25 @@ def checks_rows_with_keys(all_rows,rows,keys):
     # Print the unique rows for these keys
     singleton_rows = find_singletons(all_rows,rows,keys)
     if singleton_rows:
-        global total_count
-        print(" singleton rows: {}".format(len(singleton_rows)))
-        total_count += len(singleton_rows)
+        count = len(singleton_rows)
+        print(" singleton rows: {}".format(count))
         if args.verbose:
             print_rows(singleton_rows,keys)
 
         # Now process all of the sub lists
         for sub_keys in choose_all_subkeys(keys):
             if sub_keys not in checked_keys:
-                checks_rows_with_keys(all_rows,singleton_rows,sub_keys)
+                count += check_rows_with_keys(all_rows,singleton_rows,sub_keys)
+        return count
+    return 0
+
+def read_rows(path,delimiter=','):
+    rows = []
+    with open(path,"r") as f:
+        for line in csv.reader(f,delimiter=delimiter):
+            rows.append(tuple(line)) # use tuples so they will be hashable
+    return rows
+    
 
 #
 # Run the matcher. 
@@ -129,23 +135,25 @@ if __name__=="__main__":
     parser.add_argument('--debug', action="store_true")
     parser.add_argument('--verbose', action="store_true", help='Print each set')
     parser.add_argument('--printdata',action='store_true',help='Print the initial dataset')
+    parser.add_argument('--nocolor', action='store_true', help='Turns off color')
+    parser.add_argument('--range', type=str, help="specify range of search",default="1-max")
     args = parser.parse_args()
 
-    rows = []
-    with open(args.infile,"r") as f:
-        for line in csv.reader(f,delimiter=args.delimiter):
-            rows.append(tuple(line)) # use tuples so they will be hashable
+    rows = read_rows(args.infile,delimiter=args.delimiter)
 
     if args.printdata or args.verbose:
         print("here is the dataset:")
         print_rows(rows)
     
-    keys = frozenset(range(1,len(rows[0])))
-    print("Keys that we will consider: {}".format(strkeys(keys)))
+    (rmin,rmax) = args.range.split("-")
+    rmin = int(rmin)
+    rmax = len(rows[0]) if rmax=="max" else int(rmax)
 
+    keys = frozenset(range(rmin,rmax))
+    print("Keys that we will consider: {}".format(strkeys(keys)))
     print("Here are the uniques for each set of keys:")
-    checks_rows_with_keys(rows,rows,keys)
-    print("Total of all uniques {}".format(total_count))
+    count = check_rows_with_keys(rows,rows,keys)
+    print("Total of all uniques {}".format(count))
     r = resource.getrusage(resource.RUSAGE_SELF)
     print("User CPU: {}   RSS:{}".format(r.ru_utime,r.ru_maxrss))
     print("User CPU: {}   RSS:{}".format(r.ru_utime,r.ru_maxrss),file=sys.stderr)
