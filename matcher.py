@@ -11,12 +11,19 @@ def strkeys(keys):
     assert type(keys)==frozenset
     return " ".join([str(x) for x in sorted(keys)])
 
-def print_rows(rows,keys):
+def print_rows(rows,keys=frozenset()):
+    from color import color
     global total_count
     total_count += len(rows)
     print("==== keys: {} count: {} ====".format(strkeys(keys),len(rows)))
     for row in rows:
-        print(row)
+        print("( ",end="")
+        for i in range(0,len(row)):
+            if i>0: print(", ",end='')
+            if i in keys: print(color.BOLD+color.RED,end='')
+            print(row[i],end='')
+            if i in keys: print(color.END,end='')
+        print(") ")
     print("\n")
 
 def choose_all_subkeys(keys):
