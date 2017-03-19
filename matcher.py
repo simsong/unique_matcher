@@ -43,6 +43,7 @@ def choose_all_subkeys(keys):
         return []  
     return [keys-frozenset([key]) for key in keys]
 
+from memoize import Memoize
 def find_singletons(all_rows,rows,keys):
     """Find and return the singletons at the current level.
     @all_rows is the list of all rows in the original dataset. We always need to prune against that.
@@ -54,7 +55,7 @@ def find_singletons(all_rows,rows,keys):
 
     # http://stackoverflow.com/questions/18272160/access-multiple-elements-of-list-knowing-their-index
     # Make a function that extracts the key columns and makes a tuple
-
+    # Note: I tried Memoizing this function, and the runtime increased by 5x. 
     kfun = operator.itemgetter(*keys)
     #kfun = Memoize(operator.itemgetter(*keys))
         
@@ -63,25 +64,42 @@ def find_singletons(all_rows,rows,keys):
     data_keys   = [kfun(row) for row in rows]
 
     # Find those that are unique
-    unique_keys = [key_count[0] for key_count in Counter(data_keys).most_common() if key_count[1]==1]
+    #unique_keys = [key_count[0] for key_count in Counter(data_keys).most_common() if key_count[1]==1]
     #unique_keys = frozenset(unique_keys) # it's faster to search a set
-    #unique_keys = frozenset((key_count[0] for key_count in Counter(data_keys).most_common() if key_count[1]==1))
+    unique_keys = frozenset((key_count[0] for key_count in Counter(data_keys).most_common() if key_count[1]==1))
     
     # Get the rows that have their keys in unique_keys
     ret = [row for row in rows if (kfun(row) in unique_keys)]
 
-    # Argh! We need to scan against all_rows to see if each ret matches an existing 
-    # one with the same keys, but which has a different ID
-    # If we need to do it this way, we should at least sort and use a binary search,
-    # but we don't do that now.
+    # Finally, we need to scan against all_rows to see if each ret matches an existing 
+    # one with the same keys, but which has a different ID.
+    # This may require that we purchase some values.
+    # For simplicity, we define purge as an inner function
 
+    ### First version of purge
+    #def purge(candidate):
+    #    for row in all_rows:
+    #        if ((candidate != row) and kfun(candidate) == kfun(row)):
+    #            if args.debug:
+    #                print("purge {}".format(candidate))
+    #            return True
+    #    return False
+    #####
+
+    ### Second version of purge. We need to purge if there are any in the all_rows
+    ### dataset that have the same kfun(row) but which are not this particular row.
+    ### The way we do this is by creating a datastructure where the key is the kfun(row)
+    ### and it is a set of all the rows with that kfun(). THen, to test row, we check
+    ### that data structure and see if there are any present are other than row.
+    all_kfuns = defaultdict(set)
+    for row in all_rows:
+        all_kfuns[kfun(row)].add(row)
     def purge(candidate):
-        for row in all_rows:
-            if ((candidate != row) and kfun(candidate) == kfun(row)):
-                if args.debug:
-                    print("purge {}".format(candidate))
-                return True
-        return False
+        for row_with_matching_kfun in all_kfuns[kfun(candidate)]:
+            if row_with_matching_kfun!=candidate:
+                return True    # purge it!
+        return False            # don't purge it
+
 
     # return ret
     # Now filter out those that should be purged
@@ -94,7 +112,8 @@ checked_keys = set()
 def check_rows_with_keys(all_rows,rows,keys):
     # Note that we have now checked this permutation of keys
     # Must do this at the beginning because of recursive call
-    print("check_row_with_keys({},{},{})".format(len(all_rows),len(rows),keys),end='')
+    if args.verbose:
+        print("check_row_with_keys({},{},{})".format(len(all_rows),len(rows),keys),end='')
 
     checked_keys.add(keys)
 
@@ -102,7 +121,6 @@ def check_rows_with_keys(all_rows,rows,keys):
     singleton_rows = find_singletons(all_rows,rows,keys)
     if singleton_rows:
         count = len(singleton_rows)
-        print(" singleton rows: {}".format(count))
         if args.verbose:
             print_rows(singleton_rows,keys)
 
@@ -151,9 +169,8 @@ if __name__=="__main__":
 
     keys = frozenset(range(rmin,rmax))
     print("Keys that we will consider: {}".format(strkeys(keys)))
-    print("Here are the uniques for each set of keys:")
     count = check_rows_with_keys(rows,rows,keys)
     print("Total of all uniques {}".format(count))
     r = resource.getrusage(resource.RUSAGE_SELF)
     print("User CPU: {}   RSS:{}".format(r.ru_utime,r.ru_maxrss))
-    print("User CPU: {}   RSS:{}".format(r.ru_utime,r.ru_maxrss),file=sys.stderr)
+
