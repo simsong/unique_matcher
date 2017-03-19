@@ -57,53 +57,21 @@ def find_singletons(all_rows,rows,keys):
     # Make a function that extracts the key columns and makes a tuple
     # Note: I tried Memoizing this function, and the runtime increased by 5x. 
     kfun = operator.itemgetter(*keys)
-    #kfun = Memoize(operator.itemgetter(*keys))
-        
 
-    # extract all of the keys from the rows that were passed in 
-    data_keys   = [kfun(row) for row in rows]
+    # For every row in rows, extract the kfun and note all the rows with that kfun
+    rows_kfuns = defaultdict(set)
+    for row in rows:
+        rows_kfuns[kfun(row)].add(row)
 
-    # Find those that are unique
-    #unique_keys = [key_count[0] for key_count in Counter(data_keys).most_common() if key_count[1]==1]
-    #unique_keys = frozenset(unique_keys) # it's faster to search a set
-    unique_keys = frozenset((key_count[0] for key_count in Counter(data_keys).most_common() if key_count[1]==1))
-    
-    # Get the rows that have their keys in unique_keys
-    ret = [row for row in rows if (kfun(row) in unique_keys)]
-
-    # Finally, we need to scan against all_rows to see if each ret matches an existing 
-    # one with the same keys, but which has a different ID.
-    # This may require that we purchase some values.
-    # For simplicity, we define purge as an inner function
-
-    ### First version of purge
-    #def purge(candidate):
-    #    for row in all_rows:
-    #        if ((candidate != row) and kfun(candidate) == kfun(row)):
-    #            if args.debug:
-    #                print("purge {}".format(candidate))
-    #            return True
-    #    return False
-    #####
-
-    ### Second version of purge. We need to purge if there are any in the all_rows
-    ### dataset that have the same kfun(row) but which are not this particular row.
-    ### The way we do this is by creating a datastructure where the key is the kfun(row)
-    ### and it is a set of all the rows with that kfun(). THen, to test row, we check
-    ### that data structure and see if there are any present are other than row.
-    all_kfuns = defaultdict(set)
+    # For every row in all_rows, extract the kfun and note all the rows with that kfun
+    all_rows_kfuns = defaultdict(set)
     for row in all_rows:
-        all_kfuns[kfun(row)].add(row)
-    def purge(candidate):
-        for row_with_matching_kfun in all_kfuns[kfun(candidate)]:
-            if row_with_matching_kfun!=candidate:
-                return True    # purge it!
-        return False            # don't purge it
+        all_rows_kfuns[kfun(row)].add(row)
+        
+    # Now, for every kfun, we want the ones that are singletons in both rows and in all_rows
 
+    return [ next( iter( rows_kfuns[kf] )) for kf in rows_kfuns if (len(rows_kfuns[kf])==1 and len(all_rows_kfuns[kf])==1) ]
 
-    # return ret
-    # Now filter out those that should be purged
-    return [row for row in ret if not purge(row)]
 
 
 # checked_lists is the lists of sets that we have checked.
