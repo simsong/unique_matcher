@@ -1,26 +1,15 @@
 #!/usr/bin/env python36
 
-from collections import defaultdict,Counter
 import csv
-import pytest
 import operator
-
-# http://stackoverflow.com/questions/1988804/what-is-memoization-and-how-can-i-use-it-in-python
-class Memoize:
-    def __init__(self, f):
-        self.f = f
-        self.memo = {}
-    def __call__(self, *args):
-        if not args in self.memo:
-            self.memo[args] = self.f(*args)
-        return self.memo[args]
+from collections import defaultdict
 
 
-def strkeys(keys):
-    """Return a string for a keys frozenset"""
-    assert type(keys)==frozenset
-    return " ".join([str(x) for x in sorted(keys)])
-
+###
+### Row management functions.
+### Each row is read as a tuple so that it's hashable.
+### Not sure if you can do this with pandas or numpy
+###
 def print_rows(rows,keys=frozenset()):
     from color import color
     print("==== keys: {} count: {} ====".format(strkeys(keys),len(rows)))
@@ -34,6 +23,28 @@ def print_rows(rows,keys=frozenset()):
         print(") ")
     print("\n")
 
+
+def read_rows(path, delimiter=','):
+    rows = []
+    with open(path, "r") as f:
+        for line in csv.reader(f, delimiter=delimiter):
+            rows.append(tuple(line))  # use tuples so they will be hashable
+    return rows
+
+
+###
+### Key management functions.
+### A "key" is a column number.
+### "keys" is a frozenset of several column numbers.
+### We use set because the order is irrevellant (better than sorting a list all the time)
+### We make it frozen because it is going to be used for hashing.  (A set of sets; sets can only contain hashables)
+###
+def strkeys(keys):
+    """Return a string for a keys frozenset"""
+    assert type(keys) == frozenset
+    return " ".join([str(x) for x in sorted(keys)])
+
+
 def choose_all_subkeys(keys):
     "@keys are a frozenset of keys. Return a list of all permutations of n-1 keys "
     assert type(keys) is frozenset
@@ -43,7 +54,15 @@ def choose_all_subkeys(keys):
         return []  
     return [keys-frozenset([key]) for key in keys]
 
-from memoize import Memoize
+
+###
+### Core function: find_singletons
+### Return the rows in @rows that are unique in rows and all_rows
+### Only the columns specified by @keys are considered.
+### Note: Every element in rows must be in all_rows, but this is never tested, so we only look for unique
+### in @rows that are in @all_rows
+###
+
 def find_singletons(all_rows,rows,keys):
     """Find and return the singletons at the current level.
     @all_rows is the list of all rows in the original dataset. We always need to prune against that.
@@ -58,19 +77,29 @@ def find_singletons(all_rows,rows,keys):
     # Note: I tried Memoizing this function, and the runtime increased by 5x. 
     kfun = operator.itemgetter(*keys)
 
-    # For every row in rows, extract the kfun and note all the rows with that kfun
-    rows_kfuns = defaultdict(set)
+    # For every row in rows, extract a tuple of the elements denoted by @keys.
+    # Then, using that as the key of the dictionary, add a reference to each row that is identified by those keys.
+    # If it is a singleton, there will be just one.
+    rows_for_key_tuples = defaultdict(set)
     for row in rows:
-        rows_kfuns[kfun(row)].add(row)
+        rows_for_key_tuples[kfun(row)].add(row)
+
+    # Note that rows_kfuncs.keys() is a list of all the combinations of keys that we care about!
 
     # For every row in all_rows, extract the kfun and note all the rows with that kfun
-    all_rows_kfuns = defaultdict(set)
+    all_rows_for_key_tuples = defaultdict(set)
     for row in all_rows:
-        all_rows_kfuns[kfun(row)].add(row)
+        all_rows_for_key_tuples[kfun(row)].add(row)
         
     # Now, for every kfun, we want the ones that are singletons in both rows and in all_rows
+    # However, we only need to check all_rows_kfuncs, because rows is a proper subset of all_rows_keyfuncs
+    # Note: next( iter( s )) returns an element of set s without modifying s.
+    # It's weird, but there is no easy way to do this in python.
+    #
+    def pick(s):
+        return next(iter(s))
 
-    return [ next( iter( rows_kfuns[kf] )) for kf in rows_kfuns if (len(rows_kfuns[kf])==1 and len(all_rows_kfuns[kf])==1) ]
+    return [pick(rows_for_key_tuples[kf]) for kf in rows_for_key_tuples if len(all_rows_for_key_tuples[kf]) == 1]
 
 
 
@@ -99,13 +128,7 @@ def check_rows_with_keys(all_rows,rows,keys):
         return count
     return 0
 
-def read_rows(path,delimiter=','):
-    rows = []
-    with open(path,"r") as f:
-        for line in csv.reader(f,delimiter=delimiter):
-            rows.append(tuple(line)) # use tuples so they will be hashable
-    return rows
-    
+
 
 #
 # Run the matcher. 
@@ -113,10 +136,11 @@ def read_rows(path,delimiter=','):
 # Eventually we should move this to parquet & pandas. 
 
 if __name__=="__main__":
-    import argparse,resource,sys
+    import argparse, resource
+
     parser = argparse.ArgumentParser(description='Extract specified variables from AHS files.',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--infile', type=str, default='data.csv', help='file to match')
+    parser.add_argument('--infile', type=str, default='test_data.csv', help='file to match')
     parser.add_argument('--delimiter', type=str, default=',', help='specify delimiter')
     parser.add_argument('--debug', action="store_true")
     parser.add_argument('--verbose', action="store_true", help='Print each set')
@@ -138,7 +162,7 @@ if __name__=="__main__":
     keys = frozenset(range(rmin,rmax))
     print("Keys that we will consider: {}".format(strkeys(keys)))
     count = check_rows_with_keys(rows,rows,keys)
-    print("Total of all uniques {}".format(count))
+    print("Total of all uniques: {}".format(count))
     r = resource.getrusage(resource.RUSAGE_SELF)
     print("User CPU: {}   RSS:{}".format(r.ru_utime,r.ru_maxrss))
 
