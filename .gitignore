@@ -2,3 +2,5 @@ __pycache__
 *~
 AHS 2013*
 .cache
+ahs_output.csv
+ahs_output.json

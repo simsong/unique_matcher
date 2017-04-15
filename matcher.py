@@ -5,11 +5,11 @@ import operator
 from collections import defaultdict
 
 
-###
-### Row management functions.
-### Each row is read as a tuple so that it's hashable.
-### Not sure if you can do this with pandas or numpy
-###
+##
+## Row management functions.
+## Each row is read as a tuple so that it's hashable.
+## Not sure if you can do this with pandas or numpy
+##
 def print_rows(rows,keys=frozenset()):
     from color import color
     print("==== keys: {} count: {} ====".format(strkeys(keys),len(rows)))
@@ -32,13 +32,13 @@ def read_rows(path, delimiter=','):
     return rows
 
 
-###
-### Key management functions.
-### A "key" is a column number.
-### "keys" is a frozenset of several column numbers.
-### We use set because the order is irrevellant (better than sorting a list all the time)
-### We make it frozen because it is going to be used for hashing.  (A set of sets; sets can only contain hashables)
-###
+##
+## Key management functions.
+## A "key" is a column number.
+## "keys" is a frozenset of several column numbers.
+## We use set because the order is irrevellant (better than sorting a list all the time)
+## We make it frozen because it is going to be used for hashing.  (A set of sets; sets can only contain hashables)
+##
 def strkeys(keys):
     """Return a string for a keys frozenset"""
     assert type(keys) == frozenset
