@@ -91,15 +91,21 @@ def find_singletons(all_rows,rows,keys):
     for row in all_rows:
         all_rows_for_key_tuples[kfun(row)].add(row)
         
-    # Now, for every kfun, we want the ones that are singletons in both rows and in all_rows
-    # However, we only need to check all_rows_kfuncs, because rows is a proper subset of all_rows_keyfuncs
-    # Note: next( iter( s )) returns an element of set s without modifying s.
-    # It's weird, but there is no easy way to do this in python.
-    #
     def pick(s):
+        """Return an element of set s wtihout modifying set s"""
         return next(iter(s))
 
-    return [pick(rows_for_key_tuples[kf]) for kf in rows_for_key_tuples if len(all_rows_for_key_tuples[kf]) == 1]
+    def distinct(v):
+        """Returns True if v contains a single element"""
+        return len(s)==1
+
+    #
+    # Now, return an array of ROWS for the ROWS that are distinct in @all_rows.
+    # We do this by looping over the combines of indexes (rows_for_key_tuples.keys())
+    # and returning the row in rows_for_key_tuples that are distinct in all_worws_for_key_tuples.
+    #
+
+    return [ pick(rows_for_key_tuples[kf]) for kf in rows_for_key_tuples if distinct(all_rows_for_key_tuples[kf]) ]
 
 
 
@@ -107,11 +113,16 @@ def find_singletons(all_rows,rows,keys):
 # at the beginning, we have checked the empty list.
 checked_keys = set()
 def check_rows_with_keys(all_rows,rows,keys):
-    # Note that we have now checked this permutation of keys
-    # Must do this at the beginning because of recursive call
+    """@param all_rows --- all of the rows in the original dataset.
+    @param rows --- The rows in which we are to look for unique keys.
+    @param keys --- The specific keys we are to check.
+    @return     --- Returns the number of distinct rows that are found.
+    """
     if args.verbose:
         print("check_row_with_keys({},{},{})".format(len(all_rows),len(rows),keys),end='')
 
+    # Note that we have now checked this permutation of keys
+    # Must do this at the beginning because of recursive call
     checked_keys.add(keys)
 
     # Print the unique rows for these keys
