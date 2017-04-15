@@ -4,8 +4,11 @@
 # Replace all unknowns with "None"
 # Creates both a JSON and a CSV file (In the future, a parquet file)
 
-import os,csv,json
+import csv
+import json
+import os
 from collections import defaultdict
+
 from orderedset import OrderedSet
 
 DB='AHS 2013 National PUF v1.2 CSV'
@@ -40,7 +43,8 @@ def get_link_var_files(link_vars):
 
 def ahs_clean(var):
     """Clean up the data according to AHS key"""
-    var = var.replace("'","")
+    if var[0] == var[-1] == "'":
+        var = var[1:-1]
     return var if var not in AHS_MISSING else None
 
 
@@ -56,7 +60,11 @@ if __name__=="__main__":
 
     link_vars      = OrderedSet(args.link_vars.split(","))
     link_var_files = get_link_var_files(link_vars)
-    
+
+    if not link_var_files:
+        print("No link_var_files found")
+        exit(1)
+
     # Find the fields that have each variable we want
     file_vars = defaultdict(set)
     for var in link_vars:
@@ -85,7 +93,11 @@ if __name__=="__main__":
     # Now build the rows
         
     for id in ids:
-        row = [id] + [ ids[id].get(v,None) for v in link_vars]
+        if id[0] == id[-1] == "'":
+            pid = id[1:-1]
+        else:
+            pid = id
+        row = [pid] + [ids[id].get(v, None) for v in link_vars]
         rows.append(row)
 
     # write the results
