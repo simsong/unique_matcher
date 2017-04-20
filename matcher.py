@@ -97,7 +97,7 @@ def find_singletons(all_rows,rows,keys):
 
     def distinct(v):
         """Returns True if v contains a single element"""
-        return len(s)==1
+        return len(v)==1
 
     #
     # Now, return an array of ROWS for the ROWS that are distinct in @all_rows.
@@ -109,10 +109,22 @@ def find_singletons(all_rows,rows,keys):
 
 
 
+def find_missing_values(rows,keys):
+    """Return an array of the rows that have a missing value ("") for any of the keys"""
+    # We need to make a kfun that always returns a tuple, even for 1 value
+    if len(keys)==1:
+        kfun = lambda e : ( e[ next(iter(keys)) ] , )
+    else:
+        kfun = operator.itemgetter(*keys)
+    return [row for row in rows if "" in kfun(row)]
+
+
+
+
 # checked_lists is the lists of sets that we have checked.
 # at the beginning, we have checked the empty list.
 checked_keys = set()
-def check_rows_with_keys(all_rows,rows,keys):
+def check_rows_with_keys(all_rows,rows,keys,alert):
     """@param all_rows --- all of the rows in the original dataset.
     @param rows --- The rows in which we are to look for unique keys.
     @param keys --- The specific keys we are to check.
@@ -127,7 +139,12 @@ def check_rows_with_keys(all_rows,rows,keys):
 
     # Print the unique rows for these keys
     singleton_rows = find_singletons(all_rows,rows,keys)
-    if singleton_rows:
+
+    missing_value_rows = find_missing_values(rows,keys)
+    if missing_value_rows:
+        alert("missing_value_rows:",missing_value_rows)
+
+    if singleton_rows + missing_value_rows:
         count = len(singleton_rows)
         if args.verbose:
             print_rows(singleton_rows,keys)
@@ -135,10 +152,9 @@ def check_rows_with_keys(all_rows,rows,keys):
         # Now process all of the sub lists
         for sub_keys in choose_all_subkeys(keys):
             if sub_keys not in checked_keys:
-                count += check_rows_with_keys(all_rows,singleton_rows,sub_keys)
+                count += check_rows_with_keys(all_rows,singleton_rows + missing_value_rows,sub_keys, alert)
         return count
     return 0
-
 
 
 #
@@ -172,7 +188,7 @@ if __name__=="__main__":
 
     keys = frozenset(range(rmin,rmax))
     print("Keys that we will consider: {}".format(strkeys(keys)))
-    count = check_rows_with_keys(rows,rows,keys)
+    count = check_rows_with_keys(rows,rows,keys,print)
     print("Total of all uniques: {}".format(count))
     r = resource.getrusage(resource.RUSAGE_SELF)
     print("User CPU: {}   RSS:{}".format(r.ru_utime,r.ru_maxrss))
