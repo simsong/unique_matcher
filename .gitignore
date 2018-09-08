@@ -1,6 +1,7 @@
-__pycache__
 *~
-AHS 2013*
+.DS_Store
 .cache
+AHS 2013*
+__pycache__
 ahs_output.csv
 ahs_output.json
