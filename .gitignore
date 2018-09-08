@@ -5,3 +5,5 @@ AHS 2013*
 __pycache__
 ahs_output.csv
 ahs_output.json
+ahs_linked_data.txt
+*.zip

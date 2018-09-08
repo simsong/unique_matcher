@@ -1,0 +1,1252 @@
+Delivered-To: simsong@gmail.com
+Received: by 10.25.162.12 with SMTP id l12csp356021lfe;
+        Wed, 15 Mar 2017 08:51:48 -0700 (PDT)
+X-Received: by 10.237.63.89 with SMTP id q25mr3317512qtf.253.1489593107923;
+        Wed, 15 Mar 2017 08:51:47 -0700 (PDT)
+Return-Path: <SRS0+7445c03df9b80855=2Y=census.gov=Aref.N.Dajani@srs.acm.org>
+Received: from acmsmtp01.acm.org (ACMSMTP01.acm.org. [64.238.147.78])
+        by mx.google.com with ESMTPS id q5si1685138qkb.307.2017.03.15.08.51.47
+        for <simsong@gmail.com>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 15 Mar 2017 08:51:47 -0700 (PDT)
+Received-SPF: pass (google.com: domain of srs0+7445c03df9b80855=2y=census.gov=aref.n.dajani@srs.acm.org designates 64.238.147.78 as permitted sender) client-ip=64.238.147.78;
+Authentication-Results: mx.google.com;
+       dkim=pass (test mode) header.i=@census.gov;
+       dkim=pass header.i=@uscensus.onmicrosoft.com;
+       spf=pass (google.com: domain of srs0+7445c03df9b80855=2y=census.gov=aref.n.dajani@srs.acm.org designates 64.238.147.78 as permitted sender) smtp.mailfrom=SRS0+7445c03df9b80855=2Y=census.gov=Aref.N.Dajani@srs.acm.org;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=census.gov
+Received: from in-005.lax.mailroute.net
+        by acmsmtp01.acm.org (ACM Email Forwarding Service) with ESMTP id 1201703151151313114
+        for <simsong@acm.org>; Wed, 15 Mar 2017 11:51:31 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by in-005.lax.mailroute.net (Postfix) with ESMTP id 3vjx1D64j2z1T4xp
+	for <simsong@acm.org>; Wed, 15 Mar 2017 15:51:44 +0000 (UTC)
+X-Virus-Scanned: by MailRoute
+X-Spam-Flag: NO
+X-Spam-Score: -0.13
+X-Spam-Level:
+X-Spam-Status: No, score=-0.13 tagged_above=-9999 required=0
+	tests=[DKIM_SIGNED=-0.1, DKIM_VALID=-0.01, DKIM_VALID_AU=-0.01,
+	DKIM_VERIFIED=-0.01, HTML_MESSAGE=0.001, SPF_PASS=-0.001]
+	autolearn=disabled
+Authentication-Results: 005.lax.mailroute.net (mroute_mailscanner);
+	dkim=pass (2048-bit key) header.d=census.gov header.b=PQBtB7u4;
+	dkim=pass (1024-bit key) header.d=uscensus.onmicrosoft.com
+	header.b=rmQ+BgvO
+Received: from in-005.lax.mailroute.net ([199.89.1.8])
+	by localhost (005.lax.mailroute.net [127.0.0.1]) (mroute_mailscanner, port 10024)
+	with LMTP id i6fBf4ZeGr2t for <simsong@acm.org>;
+	Wed, 15 Mar 2017 15:51:42 +0000 (UTC)
+X-Envelope-From: <aref.n.dajani@census.gov>
+Received: from hq-mail2.tco.census.gov (hq-mail2.tco.census.gov [148.129.129.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by in-005.lax.mailroute.net (Postfix) with ESMTPS id 3vjx192RBTz1T5FQ
+	for <simsong@acm.org>; Wed, 15 Mar 2017 15:51:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=census.gov; i=@census.gov; q=dns/txt; s=20140626;
+  t=1489593102; x=1521129102;
+  h=from:to:subject:date:message-id:references:in-reply-to:
+   mime-version;
+  bh=mWdyiwXDIHGVpL/9gmxXizjQ8c9/g2IsXb+Um8czG2c=;
+  b=PQBtB7u4kbq5Uf/VlAbx+jtQbkX6v0Nm2NA//68bpnYv6f9CZXKdYFnU
+   ESBgo17nd13lE6Iy267CxYlVU6Xx3WH4Bue+IS6hhmHGXcmXNIUt64ZE7
+   8Xc1Nk4FaK/CLE+dLJZs/xu8nj18JKVSrFiHcoOoEmMsDlm/+ZpA72hfM
+   uJN1jP68LA1ScsQF3wokx4e92FD6XbyMbkWmAHOAaXEhQXQ5syeoSlxDc
+   0sJwfTV8Y/RO3nZVWIfZRnnBxsdaChSWI7MMNOH760cpzuJ4kitEbs3OG
+   4hKfaz+egF90Nk1cGfVnLgKl9VdFOyEm6YfTXwLzKtjErVaj65f7l0X9J
+   A==;
+X-IronPort-AV: E=Sophos;i="5.36,169,1486443600"; 
+   d="scan'208,217";a="58730246"
+Received: from mail-cy1gcc01lp0017.outbound.protection.outlook.com (HELO gcc01-CY1-obe.outbound.protection.outlook.com) ([23.103.198.17])
+  by mail1.o365.census.gov with ESMTP/TLS/AES256-SHA256; 15 Mar 2017 11:51:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=uscensus.onmicrosoft.com; s=selector1-census-gov;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=mWdyiwXDIHGVpL/9gmxXizjQ8c9/g2IsXb+Um8czG2c=;
+ b=rmQ+BgvOJBExTkAfmtK+9PZuVfjot5VYQAZz9kHS9L1h4id9sJ3+7TAx0RhfIcK8LvE5AT0SgFQN3NCHiItn0QB/njW69BCpNHBo1p9eNyiZfZunMJ9K6j0WIc/Xj1CwkGMWGlWufFg4VLZTslxb9+Oe+6PELqrSD8jAv6to5uk=
+Received: from BN3PR09MB0417.namprd09.prod.outlook.com (10.160.115.25) by
+ BN3PR09MB0418.namprd09.prod.outlook.com (10.160.115.26) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.961.17; Wed, 15 Mar 2017 15:51:38 +0000
+Received: from BN3PR09MB0417.namprd09.prod.outlook.com ([10.160.115.25]) by
+ BN3PR09MB0417.namprd09.prod.outlook.com ([10.160.115.25]) with mapi id
+ 15.01.0961.022; Wed, 15 Mar 2017 15:51:38 +0000
+From: "Aref N Dajani (CENSUS/CDAR FED)" <Aref.N.Dajani@census.gov>
+To: Simson Garfinkel <simsong@acm.org>
+Subject: Re: output of my program
+Thread-Topic: output of my program
+Thread-Index: AQHSnOyM3N6RigJqJk2ecPPulV3HeKGWDS0E
+Date: Wed, 15 Mar 2017 15:51:38 +0000
+Message-ID: <BN3PR09MB0417182A1C69821FBD37A4D4C0270@BN3PR09MB0417.namprd09.prod.outlook.com>
+References: <1BB546D1-4BE5-4F5B-9E3B-B03F9D577FA6@acm.org>
+In-Reply-To: <1BB546D1-4BE5-4F5B-9E3B-B03F9D577FA6@acm.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: acm.org; dkim=none (message not signed)
+ header.d=none;acm.org; dmarc=none action=none header.from=census.gov;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [148.129.71.54]
+x-microsoft-exchange-diagnostics: 1;BN3PR09MB0418;7:RzqgqxmlERvamfRMkfe4jqKvuYGllE+ew6NItwKOS27wJHHJqLswhGmriNCqjtLv6vg3RadlPd77eqtX6XTPVEomzkHQk0vGIehxLi5Wh8oiEsR5Z2Y/rkLG9GbvWmYkddnJnzrBOqM2CY0+yDwfKWf7yhMze3SYiXcEgVCtdPGZyCm6X2wnVWDQNPa/i3mW/zVen29oOEnA3rT1bIfrJ6C55xHVdbbGxajUyxm22XaockpUKRH2fIpEXusuuNzqyNt34gXI2T2SfCvP9AvWGGzBQ5jM3UZ/N5VRHSD4uq754kTWpQEW0yG9sqpPZGsb4WFOv2zLAYXvHWJpVy7KrQ==
+x-ms-office365-filtering-correlation-id: a3171493-ed43-41ab-dcf9-08d46bbb2a9d
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: UriScan:;BCL:0;PCL:0;RULEID:(22001)(48565401081);SRVR:BN3PR09MB0418;
+x-microsoft-antispam-prvs: <BN3PR09MB04185ED3C2F161DF0E1920C4C0270@BN3PR09MB0418.namprd09.prod.outlook.com>
+x-exchange-antispam-report-test: UriScan:(213716511872227)(246271257271587);
+x-exchange-antispam-report-cfa-test: BCL:0;PCL:0;RULEID:(6040375)(601004)(2401047)(8121501046)(5005006)(3002001)(10201501046)(6055026)(6041248)(20161123562025)(20161123560025)(20161123564025)(20161123558025)(20161123555025)(6072148);SRVR:BN3PR09MB0418;BCL:0;PCL:0;RULEID:;SRVR:BN3PR09MB0418;
+x-forefront-prvs: 02475B2A01
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39840400002)(39850400002)(39410400002)(39450400003)(377454003)(53546007)(55016002)(33656002)(2900100001)(2906002)(99286003)(6436002)(74316002)(66066001)(122556002)(53946003)(38730400002)(25786008)(189998001)(110136004)(5880100001)(3480700004)(5660300001)(7696004)(8676002)(2950100002)(77096006)(6916009)(8936002)(81166006)(6506006)(7736002)(6246003)(3846002)(6116002)(102836003)(54356999)(86362001)(3280700002)(229853002)(236005)(76176999)(50986999)(9686003)(53936002)(3660700001)(19627405001)(54896002)(579004);DIR:OUT;SFP:1102;SCL:1;SRVR:BN3PR09MB0418;H:BN3PR09MB0417.namprd09.prod.outlook.com;FPR:;SPF:None;MLV:sfv;LANG:en;
+spamdiagnosticoutput: 1:99
+spamdiagnosticmetadata: NSPM
+Content-Type: multipart/alternative;
+	boundary="_000_BN3PR09MB0417182A1C69821FBD37A4D4C0270BN3PR09MB0417namp_"
+MIME-Version: 1.0
+X-OriginatorOrg: census.gov
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Mar 2017 15:51:38.2721
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3aa716f1-e559-41ce-a530-47d18313c603
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN3PR09MB0418
+
+--_000_BN3PR09MB0417182A1C69821FBD37A4D4C0270BN3PR09MB0417namp_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+Simson, I am very impressed by how quickly you moved on the algorithm and g=
+ot it to run.
+
+Our numbers were very close.
+
+Drum roll: I counted 123 sample uniques; you counted 128.
+
+I checked on your extra five; they were not uniques.
+
+
+Given how little time you took to program, I am very impressed by how close=
+ our numbers were.
+
+
+The non-uniques you had were:
+
+keys 2 4: 15555 and 16666 (an additional observation for each with the same=
+ key)
+
+key 2: 19999 (three additional observations with the same key)
+
+keys: 2 3: 20000 and 21111 (two additional observations for each with the s=
+ame key)
+
+
+
+Congrats, Aref
+
+
+
+Aref N. Dajani, Mathematical Statistician
+
+Center for Disclosure Avoidance Research
+
+
+
+5K145, x3-1797
+
+Aref.N.Dajani@census.gov<mailto:Aref.N.Dajani@census.gov>
+
+________________________________
+From: Simson Garfinkel <simsong@gmail.com> on behalf of Simson Garfinkel <s=
+imsong@acm.org>
+Sent: Tuesday, March 14, 2017 1:58:05 PM
+To: Aref N Dajani (CENSUS/CDAR FED)
+Subject: output of my program
+
+[Dance ~/gits/matcher 13:57:42](master) $ python matcher.py
+here is the dataset:
+('11111', '1', '1', '1', '1')
+('12222', '1', '2', '2', '2')
+('13333', '2', '1', '3', '3')
+('14444', '2', '2', '1', '4')
+('15555', '3', '1', '2', '1')
+('16666', '3', '2', '3', '2')
+('17777', '1', '3', '1', '3')
+('18888', '2', '3', '2', '4')
+('19999', '3', '3', '3', '1')
+('20000', '1', '1', '1', '2')
+('21111', '2', '2', '2', '3')
+('22222', '3', '3', '3', '4')
+('22223', '4', '1', '1', '1')
+('22224', '4', '2', '2', '2')
+('22225', '4', '3', '3', '3')
+('22226', '4', '4', '4', '4')
+Keys that we will consider: frozenset({1, 2, 3, 4})
+Here are the uniques for each set of keys:
+=3D=3D=3D=3D keys: 1 2 3 4 count: 16 =3D=3D=3D=3D
+('11111', '1', '1', '1', '1')
+('12222', '1', '2', '2', '2')
+('13333', '2', '1', '3', '3')
+('14444', '2', '2', '1', '4')
+('15555', '3', '1', '2', '1')
+('16666', '3', '2', '3', '2')
+('17777', '1', '3', '1', '3')
+('18888', '2', '3', '2', '4')
+('19999', '3', '3', '3', '1')
+('20000', '1', '1', '1', '2')
+('21111', '2', '2', '2', '3')
+('22222', '3', '3', '3', '4')
+('22223', '4', '1', '1', '1')
+('22224', '4', '2', '2', '2')
+('22225', '4', '3', '3', '3')
+('22226', '4', '4', '4', '4')
+
+
+=3D=3D=3D=3D keys: 2 3 4 count: 12 =3D=3D=3D=3D
+('13333', '2', '1', '3', '3')
+('14444', '2', '2', '1', '4')
+('15555', '3', '1', '2', '1')
+('16666', '3', '2', '3', '2')
+('17777', '1', '3', '1', '3')
+('18888', '2', '3', '2', '4')
+('19999', '3', '3', '3', '1')
+('20000', '1', '1', '1', '2')
+('21111', '2', '2', '2', '3')
+('22222', '3', '3', '3', '4')
+('22225', '4', '3', '3', '3')
+('22226', '4', '4', '4', '4')
+
+
+=3D=3D=3D=3D keys: 3 4 count: 10 =3D=3D=3D=3D
+('14444', '2', '2', '1', '4')
+('15555', '3', '1', '2', '1')
+('16666', '3', '2', '3', '2')
+('17777', '1', '3', '1', '3')
+('18888', '2', '3', '2', '4')
+('19999', '3', '3', '3', '1')
+('20000', '1', '1', '1', '2')
+('21111', '2', '2', '2', '3')
+('22222', '3', '3', '3', '4')
+('22226', '4', '4', '4', '4')
+
+
+=3D=3D=3D=3D keys: 4 count: 0 =3D=3D=3D=3D
+
+
+=3D=3D=3D=3D keys: 3 count: 1 =3D=3D=3D=3D
+('22226', '4', '4', '4', '4')
+
+
+=3D=3D=3D=3D keys: 2 4 count: 8 =3D=3D=3D=3D
+('13333', '2', '1', '3', '3')
+('14444', '2', '2', '1', '4')
+('15555', '3', '1', '2', '1')
+('16666', '3', '2', '3', '2')
+('19999', '3', '3', '3', '1')
+('20000', '1', '1', '1', '2')
+('21111', '2', '2', '2', '3')
+('22226', '4', '4', '4', '4')
+
+
+=3D=3D=3D=3D keys: 2 count: 2 =3D=3D=3D=3D
+('19999', '3', '3', '3', '1')
+('22226', '4', '4', '4', '4')
+
+
+=3D=3D=3D=3D keys: 2 3 count: 9 =3D=3D=3D=3D
+('13333', '2', '1', '3', '3')
+('14444', '2', '2', '1', '4')
+('15555', '3', '1', '2', '1')
+('16666', '3', '2', '3', '2')
+('17777', '1', '3', '1', '3')
+('18888', '2', '3', '2', '4')
+('20000', '1', '1', '1', '2')
+('21111', '2', '2', '2', '3')
+('22226', '4', '4', '4', '4')
+
+
+=3D=3D=3D=3D keys: 1 3 4 count: 16 =3D=3D=3D=3D
+('11111', '1', '1', '1', '1')
+('12222', '1', '2', '2', '2')
+('13333', '2', '1', '3', '3')
+('14444', '2', '2', '1', '4')
+('15555', '3', '1', '2', '1')
+('16666', '3', '2', '3', '2')
+('17777', '1', '3', '1', '3')
+('18888', '2', '3', '2', '4')
+('19999', '3', '3', '3', '1')
+('20000', '1', '1', '1', '2')
+('21111', '2', '2', '2', '3')
+('22222', '3', '3', '3', '4')
+('22223', '4', '1', '1', '1')
+('22224', '4', '2', '2', '2')
+('22225', '4', '3', '3', '3')
+('22226', '4', '4', '4', '4')
+
+
+=3D=3D=3D=3D keys: 1 4 count: 8 =3D=3D=3D=3D
+('11111', '1', '1', '1', '1')
+('16666', '3', '2', '3', '2')
+('17777', '1', '3', '1', '3')
+('22222', '3', '3', '3', '4')
+('22223', '4', '1', '1', '1')
+('22224', '4', '2', '2', '2')
+('22225', '4', '3', '3', '3')
+('22226', '4', '4', '4', '4')
+
+
+=3D=3D=3D=3D keys: 1 count: 0 =3D=3D=3D=3D
+
+
+=3D=3D=3D=3D keys: 1 3 count: 8 =3D=3D=3D=3D
+('12222', '1', '2', '2', '2')
+('13333', '2', '1', '3', '3')
+('14444', '2', '2', '1', '4')
+('15555', '3', '1', '2', '1')
+('22223', '4', '1', '1', '1')
+('22224', '4', '2', '2', '2')
+('22225', '4', '3', '3', '3')
+('22226', '4', '4', '4', '4')
+
+
+=3D=3D=3D=3D keys: 1 2 4 count: 16 =3D=3D=3D=3D
+('11111', '1', '1', '1', '1')
+('12222', '1', '2', '2', '2')
+('13333', '2', '1', '3', '3')
+('14444', '2', '2', '1', '4')
+('15555', '3', '1', '2', '1')
+('16666', '3', '2', '3', '2')
+('17777', '1', '3', '1', '3')
+('18888', '2', '3', '2', '4')
+('19999', '3', '3', '3', '1')
+('20000', '1', '1', '1', '2')
+('21111', '2', '2', '2', '3')
+('22222', '3', '3', '3', '4')
+('22223', '4', '1', '1', '1')
+('22224', '4', '2', '2', '2')
+('22225', '4', '3', '3', '3')
+('22226', '4', '4', '4', '4')
+
+
+=3D=3D=3D=3D keys: 1 2 count: 10 =3D=3D=3D=3D
+('12222', '1', '2', '2', '2')
+('13333', '2', '1', '3', '3')
+('15555', '3', '1', '2', '1')
+('16666', '3', '2', '3', '2')
+('17777', '1', '3', '1', '3')
+('18888', '2', '3', '2', '4')
+('22223', '4', '1', '1', '1')
+('22224', '4', '2', '2', '2')
+('22225', '4', '3', '3', '3')
+('22226', '4', '4', '4', '4')
+
+
+=3D=3D=3D=3D keys: 1 2 3 count: 12 =3D=3D=3D=3D
+('12222', '1', '2', '2', '2')
+('13333', '2', '1', '3', '3')
+('14444', '2', '2', '1', '4')
+('15555', '3', '1', '2', '1')
+('16666', '3', '2', '3', '2')
+('17777', '1', '3', '1', '3')
+('18888', '2', '3', '2', '4')
+('21111', '2', '2', '2', '3')
+('22223', '4', '1', '1', '1')
+('22224', '4', '2', '2', '2')
+('22225', '4', '3', '3', '3')
+('22226', '4', '4', '4', '4')
+
+
+--_000_BN3PR09MB0417182A1C69821FBD37A4D4C0270BN3PR09MB0417namp_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+</head>
+<body style=3D"word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-lin=
+e-break: after-white-space;" class=3D"">
+<style type=3D"text/css" style=3D"display:none;"><!-- P {margin-top:0;margi=
+n-bottom:0;} --></style>
+<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt;color:#000000;font=
+-family:Calibri,Arial,Helvetica,sans-serif;" dir=3D"ltr">
+<p>Simson, I am very impressed by how quickly you moved on the algorithm an=
+d got it to run.</p>
+<p>Our numbers were <u>very</u> close. </p>
+<p>Drum roll:&nbsp;I counted 123 sample uniques; you counted 128.</p>
+<p>I checked on your extra five; they were not uniques.</p>
+<p><br>
+</p>
+<p>Given how little time you took to program, I am very impressed by how cl=
+ose our numbers were.</p>
+<p><br>
+</p>
+<p>The non-uniques you had were:</p>
+<p>keys 2 4: 15555 and 16666 (an additional observation for each with the s=
+ame key)</p>
+<p>key 2: 19999 (three additional observations with the same key)</p>
+<p>keys: 2 3: 20000 and 21111 (two additional observations for each with th=
+e same key)</p>
+<p>&nbsp;</p>
+<div id=3D"Signature">
+<div id=3D"divtagdefaultwrapper" style=3D"color: rgb(0, 0, 0); font-family:=
+ Calibri,Arial,Helvetica,sans-serif; font-size: 12pt; background-color: rgb=
+(255, 255, 255);">
+<div style=3D"margin: 0px; font-family: Calibri,Arial,Helvetica,sans-serif;=
+" name=3D"divtagdefaultwrapper">
+<p>Congrats, Aref</p>
+<p>&nbsp;</p>
+<p>Aref N. Dajani, Mathematical Statistician</p>
+<p>Center for Disclosure Avoidance Research</p>
+<p>&nbsp;</p>
+<p>5K145, x3-1797</p>
+<p><a id=3D"LPNoLP" href=3D"mailto:Aref.N.Dajani@census.gov">Aref.N.Dajani@=
+census.gov</a></p>
+</div>
+</div>
+</div>
+</div>
+<hr style=3D"display:inline-block;width:98%" tabindex=3D"-1">
+<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font face=3D"Calibri, sans-serif" st=
+yle=3D"font-size:11pt" color=3D"#000000"><b>From:</b> Simson Garfinkel &lt;=
+simsong@gmail.com&gt; on behalf of Simson Garfinkel &lt;simsong@acm.org&gt;=
+<br>
+<b>Sent:</b> Tuesday, March 14, 2017 1:58:05 PM<br>
+<b>To:</b> Aref N Dajani (CENSUS/CDAR FED)<br>
+<b>Subject:</b> output of my program</font>
+<div>&nbsp;</div>
+</div>
+<div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">[Dan=
+ce ~/gits/matcher 13:57:42]</span><span style=3D"font-variant-ligatures: no=
+-common-ligatures; color: #c33720" class=3D"">(master)</span><span style=3D=
+"font-variant-ligatures: no-common-ligatures" class=3D"">
+ $ python matcher.py</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">here=
+ is the dataset:</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('11=
+111', '1', '1', '1', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('12=
+222', '1', '2', '2', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('13=
+333', '2', '1', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('14=
+444', '2', '2', '1', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('15=
+555', '3', '1', '2', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('16=
+666', '3', '2', '3', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('17=
+777', '1', '3', '1', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('18=
+888', '2', '3', '2', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('19=
+999', '3', '3', '3', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('20=
+000', '1', '1', '1', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('21=
+111', '2', '2', '2', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+222', '3', '3', '3', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+223', '4', '1', '1', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+224', '4', '2', '2', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+225', '4', '3', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+226', '4', '4', '4', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">Keys=
+ that we will consider: frozenset({1, 2, 3, 4})</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">Here=
+ are the uniques for each set of keys:</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">=3D=
+=3D=3D=3D keys: 1 2 3 4 count: 16 =3D=3D=3D=3D</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('11=
+111', '1', '1', '1', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('12=
+222', '1', '2', '2', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('13=
+333', '2', '1', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('14=
+444', '2', '2', '1', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('15=
+555', '3', '1', '2', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('16=
+666', '3', '2', '3', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('17=
+777', '1', '3', '1', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('18=
+888', '2', '3', '2', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('19=
+999', '3', '3', '3', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('20=
+000', '1', '1', '1', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('21=
+111', '2', '2', '2', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+222', '3', '3', '3', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+223', '4', '1', '1', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+224', '4', '2', '2', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+225', '4', '3', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+226', '4', '4', '4', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">=3D=
+=3D=3D=3D keys: 2 3 4 count: 12 =3D=3D=3D=3D</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('13=
+333', '2', '1', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('14=
+444', '2', '2', '1', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('15=
+555', '3', '1', '2', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('16=
+666', '3', '2', '3', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('17=
+777', '1', '3', '1', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('18=
+888', '2', '3', '2', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('19=
+999', '3', '3', '3', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('20=
+000', '1', '1', '1', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('21=
+111', '2', '2', '2', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+222', '3', '3', '3', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+225', '4', '3', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+226', '4', '4', '4', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">=3D=
+=3D=3D=3D keys: 3 4 count: 10 =3D=3D=3D=3D</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('14=
+444', '2', '2', '1', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('15=
+555', '3', '1', '2', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('16=
+666', '3', '2', '3', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('17=
+777', '1', '3', '1', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('18=
+888', '2', '3', '2', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('19=
+999', '3', '3', '3', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('20=
+000', '1', '1', '1', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('21=
+111', '2', '2', '2', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+222', '3', '3', '3', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+226', '4', '4', '4', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">=3D=
+=3D=3D=3D keys: 4 count: 0 =3D=3D=3D=3D</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">=3D=
+=3D=3D=3D keys: 3 count: 1 =3D=3D=3D=3D</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+226', '4', '4', '4', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">=3D=
+=3D=3D=3D keys: 2 4 count: 8 =3D=3D=3D=3D</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('13=
+333', '2', '1', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('14=
+444', '2', '2', '1', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('15=
+555', '3', '1', '2', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('16=
+666', '3', '2', '3', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('19=
+999', '3', '3', '3', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('20=
+000', '1', '1', '1', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('21=
+111', '2', '2', '2', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+226', '4', '4', '4', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">=3D=
+=3D=3D=3D keys: 2 count: 2 =3D=3D=3D=3D</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('19=
+999', '3', '3', '3', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+226', '4', '4', '4', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">=3D=
+=3D=3D=3D keys: 2 3 count: 9 =3D=3D=3D=3D</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('13=
+333', '2', '1', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('14=
+444', '2', '2', '1', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('15=
+555', '3', '1', '2', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('16=
+666', '3', '2', '3', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('17=
+777', '1', '3', '1', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('18=
+888', '2', '3', '2', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('20=
+000', '1', '1', '1', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('21=
+111', '2', '2', '2', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+226', '4', '4', '4', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">=3D=
+=3D=3D=3D keys: 1 3 4 count: 16 =3D=3D=3D=3D</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('11=
+111', '1', '1', '1', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('12=
+222', '1', '2', '2', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('13=
+333', '2', '1', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('14=
+444', '2', '2', '1', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('15=
+555', '3', '1', '2', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('16=
+666', '3', '2', '3', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('17=
+777', '1', '3', '1', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('18=
+888', '2', '3', '2', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('19=
+999', '3', '3', '3', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('20=
+000', '1', '1', '1', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('21=
+111', '2', '2', '2', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+222', '3', '3', '3', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+223', '4', '1', '1', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+224', '4', '2', '2', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+225', '4', '3', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+226', '4', '4', '4', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">=3D=
+=3D=3D=3D keys: 1 4 count: 8 =3D=3D=3D=3D</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('11=
+111', '1', '1', '1', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('16=
+666', '3', '2', '3', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('17=
+777', '1', '3', '1', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+222', '3', '3', '3', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+223', '4', '1', '1', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+224', '4', '2', '2', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+225', '4', '3', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+226', '4', '4', '4', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">=3D=
+=3D=3D=3D keys: 1 count: 0 =3D=3D=3D=3D</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">=3D=
+=3D=3D=3D keys: 1 3 count: 8 =3D=3D=3D=3D</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('12=
+222', '1', '2', '2', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('13=
+333', '2', '1', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('14=
+444', '2', '2', '1', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('15=
+555', '3', '1', '2', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+223', '4', '1', '1', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+224', '4', '2', '2', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+225', '4', '3', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+226', '4', '4', '4', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">=3D=
+=3D=3D=3D keys: 1 2 4 count: 16 =3D=3D=3D=3D</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('11=
+111', '1', '1', '1', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('12=
+222', '1', '2', '2', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('13=
+333', '2', '1', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('14=
+444', '2', '2', '1', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('15=
+555', '3', '1', '2', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('16=
+666', '3', '2', '3', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('17=
+777', '1', '3', '1', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('18=
+888', '2', '3', '2', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('19=
+999', '3', '3', '3', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('20=
+000', '1', '1', '1', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('21=
+111', '2', '2', '2', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+222', '3', '3', '3', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+223', '4', '1', '1', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+224', '4', '2', '2', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+225', '4', '3', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+226', '4', '4', '4', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">=3D=
+=3D=3D=3D keys: 1 2 count: 10 =3D=3D=3D=3D</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('12=
+222', '1', '2', '2', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('13=
+333', '2', '1', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('15=
+555', '3', '1', '2', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('16=
+666', '3', '2', '3', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('17=
+777', '1', '3', '1', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('18=
+888', '2', '3', '2', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+223', '4', '1', '1', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+224', '4', '2', '2', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+225', '4', '3', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+226', '4', '4', '4', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">=3D=
+=3D=3D=3D keys: 1 2 3 count: 12 =3D=3D=3D=3D</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('12=
+222', '1', '2', '2', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('13=
+333', '2', '1', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('14=
+444', '2', '2', '1', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('15=
+555', '3', '1', '2', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('16=
+666', '3', '2', '3', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('17=
+777', '1', '3', '1', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('18=
+888', '2', '3', '2', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('21=
+111', '2', '2', '2', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+223', '4', '1', '1', '1')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+224', '4', '2', '2', '2')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+225', '4', '3', '3', '3')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255);" class=3D"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">('22=
+226', '4', '4', '4', '4')</span></div>
+<div style=3D"margin: 0px; font-size: 11px; line-height: normal; font-famil=
+y: Menlo; background-color: rgb(255, 255, 255); min-height: 13px;" class=3D=
+"">
+<span style=3D"font-variant-ligatures: no-common-ligatures" class=3D""></sp=
+an><br class=3D"">
+</div>
+</div>
+</body>
+</html>
+
+--_000_BN3PR09MB0417182A1C69821FBD37A4D4C0270BN3PR09MB0417namp_--
